@@ -1,36 +1,79 @@
-// ################## GITHUB NOTICE ################################
-- IGNORE THIS CODE, IM CONCERNED ABOUT THE NOTES AT THE BOTTOM
-#define DEVICE_ON 3
+#include <Servo.h>
 
-// GOBAL VARIABLES
-int brightness = 0;
+Servo servoX;  // x axis arm movement
+Servo servoY ;  // y axis movement
+
+int posX = 0;
+int posY = 0;
 
 void setup() 
 {
-  //intialize serial communication
   Serial.begin(9600);
 
-  // initialize digital pin LED_BUILTIN as an output.
-  pinMode(DEVICE_ON, OUTPUT);
+  // ########### FOR ARM ########################################
+  // this is the x position servo 
+  servoX.attach(9);  // for pin 9
+  servoX.write(0);   // start sero at degree 0
+  
+  // this is the y position servo
+  servoY.attach(10);
+  servoY.write(0); 
 }
 
 void loop() 
 {
-  // limit brightness should be 255
-  int limit = 255;
-  int fade = 5;
-  analogWrite(DEVICE_ON, brightness);
-
-  brightness += fade;  // increment the brightness by 5 
-
-  if (brightness == limit)
+  if (Serial.available() > 0) 
   {
-    brightness = 0;
+    // input in order to move the servo
+    char input = Serial.read();
+
+    // ##### AAAARRRRMMMMM #############
+    // ##### MOVEMENTS FOR X POSITION ARM MOVE #############
+    if (input == 'j')
+    {
+      posX += 10; 
+
+      if (posX > 180)
+      {
+        posX = 180;
+      } 
+      servoX.write(posX);        
+    }
+    else if (input == 'l')
+    {
+      posX -= 10;
+      // create limitation
+      if (posX < 0)
+      {
+        posX = 0;
+      }
+      servoX.write(posX);                                                  
+    }
+    // ##### MOVEMENTS FOR Y POSITION ARM MOVEMENT #############
+    if (input == 'i')
+    {
+      posY += 10; 
+
+      if (posY > 180)
+      {
+        posY = 180;
+      } 
+      servoY.write(posY);        
+    }
+    else if (input == 'k')
+    {
+      posY -= 10;
+      // create limitation
+      if (posY < 0)
+      {
+        posY = 0;
+      }
+      servoY.write(posY);                                                  
+    }
+    
+    delay(10);
   }
-
-  delay(100);
 }
-
 
 /*
 some notes to conside while programming the functions for the rover:
@@ -42,10 +85,10 @@ some notes to conside while programming the functions for the rover:
 * d = right
 
 - to move the robotic arm
-* "up arrow" = arm up
-* "left arrow" = move arm to left 
-* "down arrow" = arm down
-* "right arrow" = move arm to right
+* i = arm up
+* j = move arm to left 
+* k = arm down
+* l = move arm to right
 
 - to clamp object
 * g = grab
