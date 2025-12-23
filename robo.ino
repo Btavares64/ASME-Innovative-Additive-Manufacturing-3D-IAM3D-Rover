@@ -12,12 +12,14 @@ void setup()
 
   // ########### FOR ARM ########################################
   // this is the x position servo 
-  servoX.attach(9);  // for pin 9
+  servoX.attach(10);  // for pin 9
   servoX.write(0);   // start sero at degree 0
   
   // this is the y position servo
-  servoY.attach(10);
-  servoY.write(0); 
+  servoY.attach(11);
+  servoY.write(0);
+
+  // declare the wheels
 }
 
 void loop() 
@@ -70,7 +72,40 @@ void loop()
       }
       servoY.write(posY);                                                  
     }
-    
+    // ###### GRABBER #################
+    else if (input == 'g')
+    {
+        Serial.println("!!!!You are grabbing the item!!!!\n");
+        delay(100);
+    }
+    else if (input == 'r')
+    {
+        Serial.println("!!!!You are releasing the item!!!!\n");
+        delay(100);
+    }
+    // ##### THIS IS THE WHEELZ #############
+    // ##### this is for the wheelzzz #############
+    else if (input == 'w')
+    {
+        Serial.println("!!!!You are going forward, all motors forward!!!!\n");
+        delay(100);
+    }
+    else if (input == 's')
+    {
+        Serial.println("!!!!You are going backwards, all motors back!!!!\n");
+        delay(100);
+    }
+    else if (input == 'd')
+    {
+        Serial.println("!!!!You are turning right, left wheels are going forward and right wheels going back!!!!\n");
+        delay(100);
+    }
+    else if (input == 'a')
+    {
+        Serial.println("!!!!You are turning left, left wheels are going back and right wheels going forwards!!!!\n");
+        delay(100);
+    }
+
     delay(10);
   }
 }
