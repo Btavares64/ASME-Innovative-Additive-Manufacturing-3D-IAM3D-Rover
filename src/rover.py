@@ -2,11 +2,9 @@ import curses
 from smbus2 import SMBus
 import time
 
-# PCA9685 module config
 ADDR = 0x40
 MODE1, MODE2, PRESCALE = 0x00, 0x01, 0xFE
 
-# channels
 LEFT_SIDE = [2, 4]  
 RIGHT_SIDE = [6, 8]  
 CLAW = [0]
@@ -22,16 +20,15 @@ def setup_pca(bus):
     time.sleep(0.01)
     bus.write_byte_data(ADDR, MODE2, 0x04)
 
-    #drive wheels
 def set_group(bus, channels, speed, forward=True):
     for pwm_ch in channels:
         dir_ch = pwm_ch + 1
         
         if forward:
-            bus.write_byte_data(ADDR, 0x06 + (4 * dir_ch) + 1, 0x00) # DIR LOW
+            bus.write_byte_data(ADDR, 0x06 + (4 * dir_ch) + 1, 0x00) 
             bus.write_byte_data(ADDR, 0x06 + (4 * dir_ch) + 3, 0x10)
         else:
-            bus.write_byte_data(ADDR, 0x06 + (4 * dir_ch) + 1, 0x10) # DIR HIGH
+            bus.write_byte_data(ADDR, 0x06 + (4 * dir_ch) + 1, 0x10) 
             bus.write_byte_data(ADDR, 0x06 + (4 * dir_ch) + 3, 0x00)
 
         bus.write_byte_data(ADDR, 0x06 + (4 * pwm_ch) + 2, speed & 0xFF)
@@ -78,11 +75,9 @@ def main(stdscr):
                 break
             
             if char != -1:
-                curses.flushinp()   ## flushinp used to clear trailing input from the controller
+                curses.flushinp() 
                 last_key_time = time.time()
                 moving = True
-
-                #this is for the wheelz
                 if char == ord('a'):
                     set_group(bus, LEFT_SIDE, speed, forward=True)
                     set_group(bus, RIGHT_SIDE, speed, forward=True)
